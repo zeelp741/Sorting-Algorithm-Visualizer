@@ -1,12 +1,21 @@
 import random
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-import matplotlib.animation as animation
+import time
+import pygame
 
+#Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
+#Sets the screen 
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 512
+
+# Set the height and width of the screen
+size = [SCREEN_WIDTH, SCREEN_HEIGHT]
+screen = pygame.display.set_mode(size)
+
+#Initializes an array
 randArray = []
-
-print("Start")
 
 def createRandArray():
     num = 0 
@@ -50,13 +59,41 @@ def insertionSort(length):
 
 
 def main():
+        #Initialize pygame
+    pygame.init()
+        #Loops till the program is stopped
+    running = True
+        #Generates a Random Array
     createRandArray()
-    insertionSort(len(randArray))
-    printArray()
+        #Fits graph to screen ratio
+    spacing = 5
+
+    while running:
+        for event in pygame.event.get():
+            #Allows user to quit application
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                #Presses Escape also quits application
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                    pygame.quit()
+
+        #Fills the screen to black
+        screen.fill(BLACK)
+
+        #Draws a bar graph for the random array
+        for i in range (len(randArray)):
+            pygame.draw.rect(screen, WHITE, (spacing * i, 512, 0, -5 * randArray[i]))
+            
+
+        #Update Screen
+        pygame.display.flip()
+        pygame.display.update()
+    #insertionSort(len(randArray))
+    #printArray()
 
     
-    
-
 if __name__ == "__main__":
     main()
 
