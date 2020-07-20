@@ -36,19 +36,26 @@ def selectionSort(length):
                 min = j
         randArray[i], randArray[min] = randArray[min], randArray[i]
 
-def drawGraph():
-    fig, ax = plt.subplots(figsize=(15, 8))
-    ax.barh(randArray['value'])
+def insertionSort(length):
+    for i in range(1, length):
+        key = randArray[i]
 
-    plt.show()
+        j = i - 1
+
+        while j >= 0 and key < randArray[j]:
+            randArray[j+1] = randArray[j]
+            j -= 1
+        randArray[j+1] = key
+
+
 
 def main():
-    # createRandArray()
-    # selectionSort(len(randArray))
-    # printArray()
+    createRandArray()
+    insertionSort(len(randArray))
+    printArray()
 
-    drawGraph()
-    print('this is a test')
+    
+    
 
 if __name__ == "__main__":
     main()
