@@ -5,6 +5,7 @@ import pygame
 #Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+GREEN = (0, 240, 0)
 
 #Sets the screen 
 SCREEN_WIDTH = 1024
@@ -25,9 +26,26 @@ def createRandArray():
 
     random.shuffle(randArray)
 
+def randomizeArray():
+    random.shuffle(randArray)
+
 def printArray():
+    #Fits graph to screen ratio
+    spacing = 5
     for i in range (len(randArray)):
-        print(randArray[i])
+        pygame.draw.rect(screen, WHITE, (spacing * i, 512, 0, -5 * randArray[i]))
+
+def drawButtons():
+    #Draws the Buttons
+        #Randomize Array Button
+    pygame.draw.rect(screen, GREEN, (710, 30, 130, 75))
+        #Bubble Sort Button
+    pygame.draw.rect(screen, GREEN, (550, 135, 130, 75))
+        #Selectin Sort Button
+    pygame.draw.rect(screen, GREEN, (710, 135, 130, 75))
+        #Insertion Sort Button
+    pygame.draw.rect(screen, GREEN, (870, 135, 130, 75))
+
 
 def bubbleSort(length):
     # Implements the bubble sort algorithm to sort an array
@@ -65,8 +83,9 @@ def main():
     running = True
         #Generates a Random Array
     createRandArray()
-        #Fits graph to screen ratio
-    spacing = 5
+        
+        # Used to manage how fast the screen updates
+    clock = pygame.time.Clock()
 
     while running:
         for event in pygame.event.get():
@@ -79,15 +98,27 @@ def main():
                     running = False
                     pygame.quit()
 
-        #Fills the screen to black
+            #Gets the position of the mouse
+        mouse = pygame.mouse.get_pos()
+            #Checks to see if mouse has been clicked
+        click = pygame.mouse.get_pressed()
+            #Fills the screen to black
         screen.fill(BLACK)
+            #Draws Array to Screen
+        printArray()
+        
+        drawButtons()
+        
 
-        #Draws a bar graph for the random array
-        for i in range (len(randArray)):
-            pygame.draw.rect(screen, WHITE, (spacing * i, 512, 0, -5 * randArray[i]))
+        #Check to see if mouse is in the position
+        if mouse[0] < 840 and mouse[0] > 710 and mouse[1] < 105 and mouse[1] > 30:
+            if click[0] == 1:
+                randomizeArray()
             
-
-        #Update Screen
+        
+            #Sets the frame rate of the program
+        clock.tick(15)
+            #Update Screen
         pygame.display.flip()
         pygame.display.update()
     #insertionSort(len(randArray))
