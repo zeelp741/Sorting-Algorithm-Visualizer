@@ -2,6 +2,7 @@ import random
 import time
 import pygame
 
+
 #Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -21,10 +22,11 @@ screen = pygame.display.set_mode(size)
 
 #Initializes an array
 Array = []
+size = 250
 
 def createRandArray():
     num = 0 
-    for i in range(250):
+    for i in range(size):
         num += 1
         Array.append(num)
     random.shuffle(Array)
@@ -44,6 +46,12 @@ def drawButtons():
     pygame.draw.rect(screen, GREEN, (170, 125, BUTTON_WIDTH, BUTTON_HEIGHT))
         #Insertion Sort Button
     pygame.draw.rect(screen, GREEN, (20, 210, BUTTON_WIDTH, BUTTON_HEIGHT))
+        #Merge Sort Button
+    pygame.draw.rect(screen, GREEN, (170, 210, BUTTON_WIDTH, BUTTON_HEIGHT))
+        #Quick Sort Button
+    pygame.draw.rect(screen,GREEN, (20, 295, BUTTON_WIDTH, BUTTON_HEIGHT))
+        #Heap Sort Button
+    pygame.draw.rect(screen, GREEN,(170, 295, BUTTON_WIDTH, BUTTON_HEIGHT))
     
     #Draws the text for Buttons
     font = pygame.font.Font('freesansbold.ttf', 20)
@@ -67,6 +75,21 @@ def drawButtons():
     textRect = text.get_rect()
     textRect.center = (90, 250)
     screen.blit(text, textRect)
+        #Merge Sort Text
+    text = font.render('Merge Sort', True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (240, 250)
+    screen.blit(text, textRect)
+        #Quick Sort Text
+    text = font.render('Quick Sort', True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (90, 335)
+    screen.blit(text, textRect)
+        #Heap Sort Text
+    text = font.render('Heap Sort', True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (240, 335)
+    screen.blit(text, textRect)
 
 def checkEvents():
     #Checks to see if program has been quit
@@ -79,7 +102,6 @@ def checkEvents():
             if event.key == pygame.K_ESCAPE:
                 running = False
                 pygame.quit()
-
 
 def bubbleSort(length):
     # Implements the bubble sort algorithm to sort an array
@@ -100,7 +122,6 @@ def selectionSort(length):
         Array[min], Array[i] = Array[i], Array[min]
         update()
         
-
 def insertionSort(length):
     for i in range(length):
         key = Array[i]
@@ -111,6 +132,107 @@ def insertionSort(length):
             hold -= 1
             update()
         Array[hold] = key
+        update()
+               
+def merge(arr, left, middle, right): 
+    n1 = middle - left + 1
+    n2 = right- middle 
+  
+    Left = [0] * (n1) 
+    Right = [0] * (n2) 
+  
+    for i in range(0 , n1): 
+        Left[i] = arr[left + i] 
+  
+    for j in range(0 , n2): 
+        Right[j] = arr[middle + 1 + j] 
+  
+    i = j = 0    
+    k = left   
+  
+    while i < n1 and j < n2 : 
+        if Left[i] <= Right[j]: 
+            arr[k] = Left[i] 
+            i += 1
+        else: 
+            arr[k] = Right[j] 
+            j += 1
+        k += 1 
+    update()
+
+    while i < n1: 
+        arr[k] = Left[i] 
+        i += 1
+        k += 1
+        update()
+
+    while j < n2: 
+        arr[k] = Right[j] 
+        j += 1
+        k += 1
+        update()
+  
+def mergeSort(arr,left,right): 
+    if left < right: 
+  
+        m = (left+(right-1))//2
+  
+        # Sorts the left and right halves
+        mergeSort(arr, left, m)
+        update() 
+        mergeSort(arr, m+1, right) 
+        update()
+        merge(arr, left, m, right) 
+        update()
+
+def quickSort(Array, low, high):
+    #Implements the Quick Sort Algorithm
+    if low < high:
+        part = partition(Array, low, high)
+
+        update()
+        quickSort(Array, low, part-1)
+        update()
+        quickSort(Array, part+1, high)
+        update()
+
+def partition(Array, low, high):
+    i = low - 1             #Indexs the smaller element
+    pivot = Array[high]     #Sets the Pivot point     
+   
+    for j in range (low, high):
+       if Array[j] <= pivot:
+           i += 1
+           Array[i], Array[j] = Array[j], Array[i]
+           update()
+    Array[i+1], Array[high] = Array[high], Array[i+1]
+    update()
+    return (i+1)
+
+def heapSort(Array, length):
+    
+    for i in range(length // 2 - 1, -1, -1):
+        heapify(Array, length, i)
+    for i  in range(length - 1, 0, -1):
+        Array[i], Array[0] = Array[0], Array[i]
+        heapify(Array, i, 0)
+        update()
+    
+def heapify(arr, n , i):
+        #Initalizes largest root
+    largest = i 
+    left = 2 * i + 1 
+    right = 2 * i + 2
+
+    if left < n and arr[i] < arr[left]:
+        largest = left
+    if right < n and arr[largest] < arr[right]:
+        largest = right 
+
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]
+        update()
+        heapify(arr, n , largest)       
         update()
 
 def update():
@@ -131,7 +253,10 @@ def main():
     createRandArray()
         # Used to manage how fast the screen updates
     clock = pygame.time.Clock()
+        #Updates the screen
     update()
+        #Length of the array
+    length = len(Array)
 
     while running:
             #Gets the position of the mouse
@@ -150,24 +275,29 @@ def main():
                 randomizeArray()
         if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 125 + BUTTON_HEIGHT and mouse[1] > 125:
             if click[0] == 1:
-                bubbleSort(len(Array))
+                bubbleSort(length)
         if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 125 + BUTTON_HEIGHT and mouse[1] > 125:
             if click[0] == 1:
-                selectionSort(len(Array))
+                selectionSort(length)
         if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 210 + BUTTON_HEIGHT and mouse[1] > 210:
             if click[0] == 1:
-                insertionSort(len(Array))
+                insertionSort(length)
+        if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 210 + BUTTON_HEIGHT and mouse[1] > 210:
+            if click[0] == 1:
+                mergeSort(Array, 0,length -1 )
             
-        
+        if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 295 + BUTTON_HEIGHT and mouse[1] > 295:
+            if click[0] == 1:
+                quickSort(Array, 0, length - 1)
+        if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 295 + BUTTON_HEIGHT and mouse[1] > 295:
+            if click[0] == 1:
+                heapSort(Array,length)
+
+            
             #Sets the frame rate of the program
         clock.tick(60)
             #Update Screen
-
         pygame.display.update()
-
-    #insertionSort(len(randArray))
-    #printArray()
-
     
 if __name__ == "__main__":
     main()
