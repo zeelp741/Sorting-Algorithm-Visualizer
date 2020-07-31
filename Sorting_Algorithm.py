@@ -52,6 +52,10 @@ def drawButtons():
     pygame.draw.rect(screen,GREEN, (20, 295, BUTTON_WIDTH, BUTTON_HEIGHT))
         #Heap Sort Button
     pygame.draw.rect(screen, GREEN,(170, 295, BUTTON_WIDTH, BUTTON_HEIGHT))
+        #Bucket Sort Button
+    pygame.draw.rect(screen, GREEN,(20, 380, BUTTON_WIDTH, BUTTON_HEIGHT))
+        #Radix Sort Button
+    pygame.draw.rect(screen, GREEN,(170, 380, BUTTON_WIDTH, BUTTON_HEIGHT))
     
     #Draws the text for Buttons
     font = pygame.font.Font('freesansbold.ttf', 20)
@@ -90,6 +94,16 @@ def drawButtons():
     textRect = text.get_rect()
     textRect.center = (240, 335)
     screen.blit(text, textRect)
+        #Shell Sort Text
+    text = font.render('Shell Sort', True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (90, 420)
+    screen.blit(text, textRect)
+        #Radix Sort Text
+    text = font.render('Radix Sort', True, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (240, 420)
+    screen.blit(text, textRect)
 
 def checkEvents():
     #Checks to see if program has been quit
@@ -122,8 +136,8 @@ def selectionSort(length):
         Array[min], Array[i] = Array[i], Array[min]
         update()
         
-def insertionSort(length):
-    for i in range(length):
+def insertionSort(Array):
+    for i in range(len(Array)):
         key = Array[i]
         hold = i
 
@@ -133,6 +147,7 @@ def insertionSort(length):
             update()
         Array[hold] = key
         update()
+    return Array
                
 def merge(arr, left, middle, right): 
     n1 = middle - left + 1
@@ -183,7 +198,7 @@ def mergeSort(arr,left,right):
         mergeSort(arr, m+1, right) 
         update()
         merge(arr, left, m, right) 
-        update()
+
 
 def quickSort(Array, low, high):
     #Implements the Quick Sort Algorithm
@@ -235,6 +250,26 @@ def heapify(arr, n , i):
         heapify(arr, n , largest)       
         update()
 
+def shellSort(Array, length):
+    gap = length // 2
+
+    while gap > 0:
+        for i in range(gap, length):
+            temp = Array[i]
+            j = i
+            while j >= gap and Array[j - gap] > temp:
+                Array[j] = Array[j - gap]
+                j -= gap
+
+            Array[j] = temp
+            update()
+
+        gap //= 2
+
+def radixSort():
+    #In Progress
+    print('Working')
+
 def update():
     #Fills the screen to black
     screen.fill(BLACK)
@@ -281,21 +316,27 @@ def main():
                 selectionSort(length)
         if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 210 + BUTTON_HEIGHT and mouse[1] > 210:
             if click[0] == 1:
-                insertionSort(length)
+                insertionSort(Array)
         if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 210 + BUTTON_HEIGHT and mouse[1] > 210:
             if click[0] == 1:
-                mergeSort(Array, 0,length -1 )
-            
+                mergeSort(Array, 0,length -1 )   
         if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 295 + BUTTON_HEIGHT and mouse[1] > 295:
             if click[0] == 1:
                 quickSort(Array, 0, length - 1)
         if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 295 + BUTTON_HEIGHT and mouse[1] > 295:
             if click[0] == 1:
                 heapSort(Array,length)
+        if mouse[0] < 20 + BUTTON_WIDTH and mouse[0] > 20 and mouse[1] < 380 + BUTTON_HEIGHT and mouse[1] > 380:
+            if click[0] == 1:
+                shellSort(Array, length)
+        if mouse[0] < 170 + BUTTON_WIDTH and mouse[0] > 170 and mouse[1] < 380 + BUTTON_HEIGHT and mouse[1] > 380:
+            if click[0] == 1:
+                radixSort()
 
             
             #Sets the frame rate of the program
         clock.tick(60)
+            
             #Update Screen
         pygame.display.update()
     
