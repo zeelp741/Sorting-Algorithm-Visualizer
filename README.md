@@ -3,6 +3,6 @@ A sorting algorithm visualizer using Pygame. Creates a random array and then sor
 
 ## Instructions
 When the program initlizly runs it will show a randomized array. Click on one of the six sorting Algorithms. Click randomize array after array is sorted. 
-Press _'ESC'_ Key to exit the program
+Press __'ESC'__ Key to exit the program
 
 Author: Zeel P
