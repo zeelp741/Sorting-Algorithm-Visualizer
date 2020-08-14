@@ -1,6 +1,8 @@
 """
-*Author: Zeel P
-
+ * Author: Zeel P
+ * Date: July 19, 2020 
+ * Project: Sorting Algorithm Visualizer
+ * Description: An interactive program which allows the user to see and learn how different sorting algorithms sort random lists
 """
 
 
@@ -349,4 +351,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+    print("Starting")
 
