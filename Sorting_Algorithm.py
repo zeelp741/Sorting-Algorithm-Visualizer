@@ -15,6 +15,7 @@ import pygame
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 240, 0)
+RED = (240, 0, 0)
 
 #Sets the screen 
 SCREEN_WIDTH = 1355
@@ -63,7 +64,7 @@ def drawButtons():
         #Bucket Sort Button
     pygame.draw.rect(screen, GREEN,(20, 380, BUTTON_WIDTH, BUTTON_HEIGHT))
         #Radix Sort Button
-    pygame.draw.rect(screen, GREEN,(170, 380, BUTTON_WIDTH, BUTTON_HEIGHT))
+    pygame.draw.rect(screen, RED,(170, 380, BUTTON_WIDTH, BUTTON_HEIGHT))
     
     #Draws the text for Buttons
     font = pygame.font.Font('freesansbold.ttf', 20)
@@ -125,30 +126,39 @@ def checkEvents():
                 running = False
                 pygame.quit()
 
+# Implements the bubble sort algorithm to sort an array
 def bubbleSort(length):
-    # Implements the bubble sort algorithm to sort an array
+    #Goes through all Array Elements
     for i in range (length -1):
+        #Last i th element is already in place
         for j in range(0, length - i -1):
-            if Array[j] > Array[j+1]:
+            #Goes through the array from 0 to length - 1 -i
+            if Array[j] > Array[j+1]:       #Swaps if the number found is greater than the next element
                 Array[j] , Array[j+1] = Array[j+1], Array[j]
                 update()
 
+# Implements the selection sort algorithm to sort an array
 def selectionSort(length):
-    # Implements the selection sort algorithm to sort an array
+    #Goes through all Array Elements
     for i in range (length):
+        #Finds the minimum value in unsorted array
         min = i
         for j in range(i + 1, length):
             if Array[j] < Array[min]:
                 min = j
                 update()
+        #swaps the minimum elements with the first unswapped array element
         Array[min], Array[i] = Array[i], Array[min]
         update()
-        
+
+#Implents the Insertion Sort Algorithm   
 def insertionSort(Array):
+    #Goes through all array elements
     for i in range(len(Array)):
         key = Array[i]
         hold = i
 
+        #Moves elements of Array[0...n-1] that are larger than the key to one position ahead of their current position
         while hold > 0 and Array[hold-1] > key:
             Array[hold] = Array[hold-1]
             hold -= 1
@@ -156,22 +166,39 @@ def insertionSort(Array):
         Array[hold] = key
         update()
     return Array
+
+#Implements the Merge Sort Algorithm
+def mergeSort(arr,left,right): 
+    if left < right: 
+  
+        m = (left+(right-1))//2
+  
+        # Sorts the left and right halves
+        mergeSort(arr, left, m)
+        update() 
+        mergeSort(arr, m+1, right) 
+        update()
+        #Merge halves together
+        merge(arr, left, m, right) 
                
 def merge(arr, left, middle, right): 
     n1 = middle - left + 1
     n2 = right- middle 
   
+    #Creates temp arrays
     Left = [0] * (n1) 
     Right = [0] * (n2) 
   
+    #Copies data to temp arrays
     for i in range(0 , n1): 
         Left[i] = arr[left + i] 
   
     for j in range(0 , n2): 
         Right[j] = arr[middle + 1 + j] 
   
-    i = j = 0    
-    k = left   
+    #Merge the temp arrays back into the array
+    i = j = 0       #Initial index for first and second subarray
+    k = left        #Initial index of merged subarray
   
     while i < n1 and j < n2 : 
         if Left[i] <= Right[j]: 
@@ -183,48 +210,45 @@ def merge(arr, left, middle, right):
         k += 1 
     update()
 
+    #Copies the data from Left side
     while i < n1: 
         arr[k] = Left[i] 
         i += 1
         k += 1
         update()
 
+    #Copies the data from the Right side
     while j < n2: 
         arr[k] = Right[j] 
         j += 1
         k += 1
         update()
-  
-def mergeSort(arr,left,right): 
-    if left < right: 
-  
-        m = (left+(right-1))//2
-  
-        # Sorts the left and right halves
-        mergeSort(arr, left, m)
-        update() 
-        mergeSort(arr, m+1, right) 
-        update()
-        merge(arr, left, m, right) 
 
-
+#Implements the Quick Sort Algorithm
 def quickSort(Array, low, high):
-    #Implements the Quick Sort Algorithm
+    #Selects an element in the array as the pivot point. Elements larger than the pivot point are put 
+    # to the right of the pivot, smaller elements are put to the left of the pivot. Repeat 
     if low < high:
         part = partition(Array, low, high)
 
+        #Sorts elements before and after the pivot point
         update()
         quickSort(Array, low, part-1)
         update()
         quickSort(Array, part+1, high)
         update()
 
+#Function takes the last element as the pivot point and then places it in 
+#the correct place in the sorted array and places all smaller than the 
+#pivot to the left of the larger to the right
 def partition(Array, low, high):
     i = low - 1             #Indexs the smaller element
     pivot = Array[high]     #Sets the Pivot point     
    
     for j in range (low, high):
+        #Checks if current element is larger or smaller than the pivot
        if Array[j] <= pivot:
+           #Increments index of the smaller element
            i += 1
            Array[i], Array[j] = Array[j], Array[i]
            update()
@@ -232,43 +256,58 @@ def partition(Array, low, high):
     update()
     return (i+1)
 
+#Implements the Heap Sort Algorithm
 def heapSort(Array, length):
+    #Sets the Max Heap
     
+    #Sets the last parent location
     for i in range(length // 2 - 1, -1, -1):
         heapify(Array, length, i)
+
+    #Extracts elements one by one
     for i  in range(length - 1, 0, -1):
         Array[i], Array[0] = Array[0], Array[i]
         heapify(Array, i, 0)
         update()
     
 def heapify(arr, n , i):
-        #Initalizes largest root
+    #Initalizes largest root
     largest = i 
     left = 2 * i + 1 
     right = 2 * i + 2
 
+    # See if left child of root exists and is greater than root 
     if left < n and arr[i] < arr[left]:
         largest = left
+    # See if right child of root exists and is greater than root
     if right < n and arr[largest] < arr[right]:
         largest = right 
 
+    #Changes root if neccassary
     if largest != i:
         arr[i], arr[largest] = arr[largest], arr[i]
         update()
         heapify(arr, n , largest)       
         update()
 
+#Implements the Shell Sort Algorithm
 def shellSort(Array, length):
+    #Start off with a gap that is n /2. The elements in the array are 
+    # compared to other elements that are the gap away instead of adjacent 
+    # values. Keep reducing the gap by n/2 until array is sorted
     gap = length // 2
 
     while gap > 0:
         for i in range(gap, length):
+            #Add Array[i] to the elements that have been gap sorted. Save Array[i] in temp and make a hole at position i 
             temp = Array[i]
+            #Keep shifting gapsorted elements until position is found
             j = i
             while j >= gap and Array[j - gap] > temp:
                 Array[j] = Array[j - gap]
                 j -= gap
 
+            #Puts temp in its correct location
             Array[j] = temp
             update()
 
@@ -276,7 +315,7 @@ def shellSort(Array, length):
 
 def radixSort():
     #In Progress 
-    print('Working')
+    print('In Progess')
 
 
 def update():
