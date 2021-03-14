@@ -340,7 +340,10 @@ def main():
     update()
         #Length of the array
     length = len(Array)
-
+        # imports and sets logo for window
+    icon = pygame.image.load("logo.png")
+    pygame.display.set_icon(icon)
+    
     while running:
             #Gets the position of the mouse
         mouse = pygame.mouse.get_pos()
