@@ -43,6 +43,28 @@ Average: O(n log(n))
 Worst: O(n log(n))
 
 ##Quick Sort
+This is a divide and conquer algorithm alorithm that uses recusion
+1. Pick a number that is considered the pivot 
+2. All number that are less than the pivot are moved to the right while all greater are moved to the right 
+3. Repeat and sort
+
+### Time Complexity
+Best: O(n log(n))
+Average: O(n log(n))
+Worst: O(n^2)
+
+
+##Heap Sort
+1. Build a max heap from the input data
+2. The largest item is stored at the root of the heap. Replace it with the last item in the heap while also reducing the size of the heap by 1 
+3. heapify the root of the tree
+4. repeat until size of heap is greater than 1
+
+### Time Complexity
+Best: O(n log(n))
+Average: O(n log(n))
+Worst: O(n log(n))
+
 
 
 Author: Zeel P
